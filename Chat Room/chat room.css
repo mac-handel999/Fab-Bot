@@ -1,0 +1,142 @@
+* {
+  margin: 0px;
+  padding: 0px;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  box-sizing: border-box;
+}
+
+body {
+font-size: 1rem;  
+background-color: #FAF9F6;
+
+}
+
+.head {
+  margin: 0px;
+  padding: 10px;
+  background-color: #42445A;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo-img {
+border: 2px solid #2D2D2D;
+border-radius: 20px;
+box-shadow: 2px 1px 2px 1px black;
+width: 49px;
+height: 49px;
+}
+
+.about {
+  margin: 5px;
+  padding: 10px;
+  border: 2px solid #2D2D2D;
+  border-radius: 50px;
+  box-shadow: 2px 1px 2px 1px black;
+  text-align: center;
+  font-size: 0.5rem;
+  font-weight: bold;
+  
+ 
+}
+
+.container {
+margin: 10px;
+padding: 10px;
+display: flex;
+ margin: 0;
+ padding: 20px;
+ flex-direction: column;
+ gap: 10px; /* Space between bubbles */
+ 
+}
+
+#user-bubble {
+margin: 10px;
+padding: 10px;
+background-color: blue;
+color: #fff;
+border: 2px solid #2D2D2D;
+border-radius: 20px;
+box-shadow: 2px 1px 2px 1px black;
+
+align-self: flex-end; /* Float to the right */
+float: right; /* For older browsers or specific layouts */
+}
+
+#ai-bubble {
+  margin: 10px;
+  padding: 10px;
+  background-color: green;
+  color: #fff;
+  border: 2px solid #2D2D2D;
+  border-radius: 20px;
+  box-shadow: 2px 1px 2px 1px black;
+   align-self: flex-start; /* Float to the left */
+    float: left; /* For older browsers or specific layouts */
+}
+
+.clearfix::after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+  
+  .id {
+    margin: 4px;
+    padding: 4px;
+    font-size:0.5rem ;
+    font-weight: bold;
+    border:2px solid #fff;
+    border-radius: 90px;
+  }
+  
+  .input-section {
+  margin: 0px;
+  padding: 10px;
+  background-color: #42445A;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+ 
+  }
+  
+  #input {
+ margin: 7px;
+ padding: 7px;
+ border: 2px solid #2D2D2D;
+ border-radius: 16px;
+ box-shadow: 2px 1px 2px 1px black;
+ background-color: wheat;
+ color: #42445A;
+ text-align: center;
+ font-weight: bold;
+ width: 250px;
+ height: 50px;
+  }
+  
+  .search-btn {
+ margin: 7px;
+ padding: 7px;
+ border: 2px solid #2D2D2D;
+ border-radius: 16px;
+ box-shadow: 2px 1px 2px 1px black;
+ background-color: wheat ;
+ color: #42445A;
+ out-line: none;
+ text-align: center;
+ font-size: 0.5rem;
+ font-weight: bold;
+ width: 60px;
+ height: 50px;
+  }
+  
+  footer {
+  font-size: 0.5rem;
+  font-weight: bold;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
