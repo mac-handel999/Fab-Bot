@@ -7,7 +7,7 @@
 
 body {
     font-size: 1.5rem;
-    background-color: #FAF9F6;
+    background-color: wheat;
     
 }
 
@@ -16,9 +16,7 @@ body {
     padding: 5px;
 }
 
-.splash-screen {
-    
-}
+
 
 .splash-logo {
    margin-top: px;
@@ -32,21 +30,30 @@ body {
   padding: 10px;
 }
 
-.splash-btn,.welcome {
- margin: 36px;
+.splash-btn, .welcome {
+ margin: 28px;
  padding: 5px;
  border: 2px solid #2D2D2D;
  border-radius: 90px;
  box-shadow: 2px 2px 2px 2px black;
+ background-color:#42445A;
+ color: #fff;
  text-align: center;
  font-size: 1rem;
  font-weight: bold;
  width: 200px;
 }
 
+.splash-btn:hover {
+  border: 2px solid #fff;
+  background-color: wheat;
+  color: #000;
+  padding: 7px;
+}
+
 .welcome {
-    margin-top: px;
-    padding: 4px;
+    margin: px;
+    padding: px;
     background-color:#42445A ;
     color: #fff;
     text-align: center;

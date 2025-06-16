@@ -6,9 +6,17 @@
 }
 
 body {
-font-size: 1rem;  
-background-color: #FAF9F6;
-
+  font-size: 1rem;
+  background-color: wheat;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  margin: 0;
+  /* Add padding-bottom to body to create space for the fixed input-section */
+  /* This value should be equal to the height of your .input-section + footer, if footer is also fixed/at bottom */
+  /* Let's estimate its height to be around 70px (50px height + padding + margin) for now, you may need to adjust */
+  padding-bottom: 70px; /* Adjust this value based on the actual height of your fixed input-section and footer */
+  position: relative; /* Needed for the sticky footer if you decide to go that route, or just good practice */
 }
 
 .head {
@@ -18,14 +26,21 @@ background-color: #FAF9F6;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  box-sizing: border-box;
+  z-index: 1000;
 }
 
 .logo-img {
-border: 2px solid #2D2D2D;
-border-radius: 20px;
-box-shadow: 2px 1px 2px 1px black;
-width: 49px;
-height: 49px;
+  
+  border: 2px solid #2D2D2D;
+  border-radius: 20px;
+  box-shadow: 2px 1px 2px 1px black;
+  width: 50px;
+  height: 50px;
 }
 
 .about {
@@ -37,106 +52,122 @@ height: 49px;
   text-align: center;
   font-size: 0.5rem;
   font-weight: bold;
-  
- 
 }
 
-.container {
-margin: 10px;
-padding: 10px;
-display: flex;
- margin: 0;
- padding: 20px;
- flex-direction: column;
- gap: 10px; /* Space between bubbles */
- 
+.container { /* This is your chat-container, where bubbles appear */
+  /* Flex-grow is still important for it to take available space */
+  flex-grow: 1; 
+  overflow-y: auto; /* Ensures chat bubbles scroll within this container */
+  padding: 20px;
+  margin: 0; 
+  display: flex;
+  flex-direction: column;
+  gap: 10px; /* Space between bubbles */
+  /* If you want the chat to fill almost the entire screen above the fixed input,
+     you might remove body padding and instead give .container a max-height */
+  /* max-height: calc(100vh - (height of header + height of input-section + height of footer)); */
+  /* For now, body padding is simpler for a fixed bottom element */
 }
 
-#user-bubble {
-margin: 10px;
-padding: 10px;
-background-color: blue;
-color: #fff;
-border: 2px solid #2D2D2D;
-border-radius: 20px;
-box-shadow: 2px 1px 2px 1px black;
-
-align-self: flex-end; /* Float to the right */
-float: right; /* For older browsers or specific layouts */
+.user-bubble {
+  margin: 5px;
+  padding: 10px;
+  background-color: blue;
+  color: #fff;
+  border: 2px solid #2D2D2D;
+  border-radius: 20px;
+  box-shadow: 2px 1px 2px 1px black;
+  align-self: flex-end;
+  width: 200px; /* Consider using max-width: 80% here for responsiveness */
+  height: auto;
 }
 
-#ai-bubble {
-  margin: 10px;
+.ai-bubble {
+  margin: 5px;
   padding: 10px;
   background-color: green;
   color: #fff;
   border: 2px solid #2D2D2D;
   border-radius: 20px;
   box-shadow: 2px 1px 2px 1px black;
-   align-self: flex-start; /* Float to the left */
-    float: left; /* For older browsers or specific layouts */
+  align-self: flex-start;
+  width: 200px; /* Consider using max-width: 80% here for responsiveness */
+  height: auto;
 }
 
 .clearfix::after {
-    content: "";
-    display: table;
-    clear: both;
-  }
-  
-  .id {
-    margin: 4px;
-    padding: 4px;
-    font-size:0.5rem ;
-    font-weight: bold;
-    border:2px solid #fff;
-    border-radius: 90px;
-  }
-  
-  .input-section {
-  margin: 0px;
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.id {
+  margin: 4px;
+  padding: 4px;
+  font-size: 0.5rem;
+  font-weight: bold;
+  border: 2px solid #fff;
+  border-radius: 90px;
+}
+
+.input-section {
+  /* --- KEY CHANGES FOR FIXED POSITIONING --- */
+  position: fixed; /* Fixes it relative to the viewport */
+  bottom: 0;       /* Positions it at the very bottom */
+  left: 0;         /* Aligns it to the left edge */
+  width: 100%;     /* Makes it span the full width of the viewport */
+  box-sizing: border-box; /* Include padding/border in the width calculation */
+  /* --- END KEY CHANGES --- */
+
+  margin: 0; /* Remove existing margin to avoid extra space */
   padding: 10px;
   background-color: #42445A;
   display: flex;
   align-items: center;
   justify-content: space-between;
- 
-  }
-  
-  #input {
- margin: 7px;
- padding: 7px;
- border: 2px solid #2D2D2D;
- border-radius: 16px;
- box-shadow: 2px 1px 2px 1px black;
- background-color: wheat;
- color: #42445A;
- text-align: center;
- font-weight: bold;
- width: 250px;
- height: 50px;
-  }
-  
-  .search-btn {
- margin: 7px;
- padding: 7px;
- border: 2px solid #2D2D2D;
- border-radius: 16px;
- box-shadow: 2px 1px 2px 1px black;
- background-color: wheat ;
- color: #42445A;
- out-line: none;
- text-align: center;
- font-size: 0.5rem;
- font-weight: bold;
- width: 60px;
- height: 50px;
-  }
-  
-  footer {
+}
+
+#input {
+  margin: 7px;
+  padding: 7px;
+  border: 2px solid #2D2D2D;
+  border-radius: 16px;
+  box-shadow: 2px 1px 2px 1px black;
+  background-color: wheat;
+  color: #42445A;
+  text-align: center;
+  font-weight: bold;
+  width: 250px; /* This can be removed if flex-grow 1 makes it too wide; rely on flex-grow */
+  height: 50px;
+  flex-grow: 1;
+}
+
+.search-btn {
+  margin: 7px;
+  padding: 7px;
+  border: 2px solid #2D2D2D;
+  border-radius: 16px;
+  box-shadow: 2px 1px 2px 1px black;
+  background-color: wheat;
+  color: #42445A;
+  outline: none;
+  text-align: center;
+  font-size: 0.5rem;
+  font-weight: bold;
+  width: 60px;
+  height: 50px;
+}
+
+footer {
   font-size: 0.5rem;
   font-weight: bold;
   text-align: center;
   display: flex;
   align-items: center;
   justify-content: space-evenly;
+  background-color: #42445A;
+  color: #fff;
+  padding: 10px;
+  /* If footer is also at the very bottom and fixed, you might need to adjust body padding again.
+     For this example, let's assume footer is part of the normal flow and is pushed by body's flex. */
 }
