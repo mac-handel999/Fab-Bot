@@ -80,6 +80,9 @@ body {
   align-self: flex-end;
   max-width: 80%; /* Consider using max-width: 80% here for responsiveness */
   height: auto;
+  gap: 10px;
+  column-gap: 10px;
+  row-gap: 10px;
 }
 
 .ai-bubble {
@@ -93,6 +96,9 @@ body {
   align-self: flex-start;
   max-width: 80%; /* Consider using max-width: 80% here for responsiveness */
   height: auto;
+gap: 10px;
+column-gap: 10px;
+row-gap: 10px;
 }
 
 .clearfix::after {

@@ -146,4 +146,26 @@ document.addEventListener('DOMContentLoaded', () => {
             // --- END OF API CALL ---
         }
     });
-});
+
+    const clearChatsBtn = document.getElementById('clear-btn');
+    // Make sure this ID matches your chat display area
+
+    if (clearChatsBtn) {
+        clearChatsBtn.addEventListener('click', () => {
+            // 1. Clear chats from Local Storage
+            localStorage.removeItem(STORAGE_KEY); // Replace 'chatMessages' with your actual local storage key
+
+            // 2. Clear the DOM (empty the chat container)
+            if (chatContainer) {
+                chatContainer.innerHTML = ''; // Removes all child el ements from the chat container
+            }
+
+            console.log('Chats cleared from local storage and DOM.');
+            // Optionally, you might want to provide some user feedback, e.g., an alert or a temporary message.
+            // alert('All chats have been cleared!');
+        });
+    } else {
+        console.error('Clear Chats button (#clear-btn) not found in the DOM');
+    }
+
+    });
