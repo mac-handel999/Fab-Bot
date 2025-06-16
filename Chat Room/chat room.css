@@ -78,7 +78,7 @@ body {
   border-radius: 20px;
   box-shadow: 2px 1px 2px 1px black;
   align-self: flex-end;
-  width: 200px; /* Consider using max-width: 80% here for responsiveness */
+  max-width: 80%; /* Consider using max-width: 80% here for responsiveness */
   height: auto;
 }
 
@@ -91,7 +91,7 @@ body {
   border-radius: 20px;
   box-shadow: 2px 1px 2px 1px black;
   align-self: flex-start;
-  width: 200px; /* Consider using max-width: 80% here for responsiveness */
+  max-width: 80%; /* Consider using max-width: 80% here for responsiveness */
   height: auto;
 }
 
