@@ -104,7 +104,7 @@ row-gap: 10px;
 .clearfix::after {
   content: "";
   display: table;
-  clear: both;
+  clear: both
 }
 
 .id {
@@ -126,15 +126,15 @@ row-gap: 10px;
   /* --- END KEY CHANGES --- */
 
   margin: 0; /* Remove existing margin to avoid extra space */
-  padding: 10px;
+  padding: 5px;
   background-color: #42445A;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-evenly;
 }
 
 #input {
-  margin: 7px;
+  margin: 2px;
   padding: 7px;
   border: 2px solid #2D2D2D;
   border-radius: 16px;
@@ -143,13 +143,13 @@ row-gap: 10px;
   color: #42445A;
   text-align: center;
   font-weight: bold;
-  width: 250px; /* This can be removed if flex-grow 1 makes it too wide; rely on flex-grow */
+  width: 200px; /* This can be removed if flex-grow 1 makes it too wide; rely on flex-grow */
   height: 50px;
   flex-grow: 1;
 }
 
 .search-btn {
-  margin: 7px;
+  margin: 2px;
   padding: 7px;
   border: 2px solid #2D2D2D;
   border-radius: 16px;
@@ -160,7 +160,7 @@ row-gap: 10px;
   text-align: center;
   font-size: 0.5rem;
   font-weight: bold;
-  width: 60px;
+  width: 55px;
   height: 50px;
 }
 
