@@ -1,0 +1,12 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "/api/chat.js"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/Fab-Bot/$1"
+    }
+  ]
+}

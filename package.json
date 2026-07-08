@@ -1,0 +1,28 @@
+{
+  "name": "fab-bot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "api/chat.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node api/chat.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mac-handel999/Fab-Bot.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/mac-handel999/Fab-Bot/issues"
+  },
+  "homepage": "https://github.com/mac-handel999/Fab-Bot#readme",
+  "dependencies": {
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "node-fetch": "^3.3.2"
+  }
+}
