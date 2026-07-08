@@ -5,15 +5,24 @@ document.addEventListener('DOMContentLoaded', () => {
     const clearChatsBtn = document.getElementById('clear-btn');
 
     // --- Configuration ---
-    // Point this at your actual backend (not the Live Server port, e.g. 5500).
-    // 3000 matches the commented-out version you had earlier — adjust as needed.
-    const API_ENDPOINT = 'http://localhost:3000/api/chat';
+    // If you're running the frontend with Live Server (port 5500), it can't
+    // serve /api serverless functions — those only work via `vercel dev` or
+    // real Vercel production. So: if we detect Live Server's default port,
+    // fall back to a standalone backend on localhost:3000 (run with
+    // `node api/chat.js` directly). Otherwise use the relative path, which
+    // is correct for both `vercel dev` and production.
+    const isLiveServer = window.location.port === '5500';
+    const API_ENDPOINT = isLiveServer ? 'http://localhost:3000/api/chat' : '/api/chat';
     const STORAGE_KEY = 'fabBotChatHistory';
 
-    // Bail out early with a console warning instead of throwing if markup changed
     if (!inputElement || !promptButton || !chatContainer) {
         console.error('chat-room.js: required DOM elements not found. Check your markup selectors.');
         return;
+    }
+
+    // Configure markdown parser once, if available
+    if (typeof marked !== 'undefined') {
+        marked.setOptions({ breaks: true, gfm: true });
     }
 
     let isStreaming = false;
@@ -21,8 +30,24 @@ document.addEventListener('DOMContentLoaded', () => {
     loadChatHistory();
 
     /**
+     * Converts raw markdown text into sanitized HTML.
+     * Falls back to safely-escaped plain text if the libraries aren't loaded.
+     */
+    function renderMarkdown(rawText) {
+        if (typeof marked === 'undefined' || typeof DOMPurify === 'undefined') {
+            console.warn('marked/DOMPurify not loaded — falling back to plain text.');
+            const escapeDiv = document.createElement('div');
+            escapeDiv.textContent = rawText;
+            return escapeDiv.innerHTML;
+        }
+        const dirtyHtml = marked.parse(rawText);
+        return DOMPurify.sanitize(dirtyHtml);
+    }
+
+    /**
      * Creates and appends a message bubble to the UI.
-     * Uses textContent for user-supplied text to avoid XSS via innerHTML.
+     * AI messages are rendered as sanitized markdown->HTML.
+     * User messages stay as plain text (safe, and doesn't need formatting).
      */
     function addMessage(sender, text, isLoader = false) {
         const messageWrapper = document.createElement('div');
@@ -36,21 +61,26 @@ document.addEventListener('DOMContentLoaded', () => {
         messageWrapper.appendChild(document.createElement('br'));
         messageWrapper.appendChild(document.createElement('br'));
 
-        const p = document.createElement('p');
-        if (isLoader) {
-            p.innerHTML = '<div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>';
-        } else {
-            p.textContent = text; // safe: never interpreted as HTML
-        }
-        messageWrapper.appendChild(p);
+        const contentEl = document.createElement('div');
+        contentEl.className = 'msg-content';
 
+        if (isLoader) {
+            contentEl.innerHTML = '<div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>';
+        } else if (sender === 'ai') {
+            contentEl.innerHTML = renderMarkdown(text);
+        } else {
+            contentEl.textContent = text; // user input: plain text, never HTML
+        }
+
+        messageWrapper.appendChild(contentEl);
         chatContainer.appendChild(messageWrapper);
         chatContainer.scrollTop = chatContainer.scrollHeight;
         return messageWrapper;
     }
 
     /**
-     * Adds a "Copy" button to an AI bubble
+     * Adds a "Copy" button to an AI bubble. Copies the raw markdown text
+     * (not the rendered HTML) so pasting elsewhere keeps it editable.
      */
     function addCopyButton(messageWrapper, text) {
         const copyBtn = document.createElement('button');
@@ -75,7 +105,7 @@ document.addEventListener('DOMContentLoaded', () => {
      * Main handler for streaming the AI response
      */
     async function handlePrompt() {
-        if (isStreaming) return; // prevent overlapping requests
+        if (isStreaming) return;
         const userPrompt = inputElement.value.trim();
         if (!userPrompt) return;
 
@@ -84,7 +114,7 @@ document.addEventListener('DOMContentLoaded', () => {
         inputElement.value = '';
 
         const aiBubble = addMessage('ai', '', true);
-        const aiP = aiBubble.querySelector('p');
+        const aiContent = aiBubble.querySelector('.msg-content');
 
         try {
             const response = await fetch(API_ENDPOINT, {
@@ -105,7 +135,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const reader = response.body.getReader();
             const decoder = new TextDecoder();
             let aiResponseText = '';
-            aiP.textContent = ''; // remove loader dots
+            aiContent.textContent = ''; // remove loader dots
 
             while (true) {
                 const { done, value } = await reader.read();
@@ -121,7 +151,9 @@ document.addEventListener('DOMContentLoaded', () => {
                             const content = json?.choices?.[0]?.delta?.content;
                             if (content) {
                                 aiResponseText += content;
-                                aiP.textContent = aiResponseText;
+                                // Plain text while streaming: fast, and avoids
+                                // rendering half-finished markdown syntax mid-token.
+                                aiContent.textContent = aiResponseText;
                                 chatContainer.scrollTop = chatContainer.scrollHeight;
                             }
                         } catch (e) {
@@ -131,11 +163,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
 
-            // Once finished, add the Copy button
+            // Once the full response has arrived, render it as formatted markdown
+            aiContent.innerHTML = renderMarkdown(aiResponseText);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+
             addCopyButton(aiBubble, aiResponseText);
             saveChatHistory(userPrompt, aiResponseText);
         } catch (error) {
-            aiP.textContent = 'Error: Could not connect to the AI service.';
+            aiContent.textContent = 'Error: Could not connect to the AI service.';
             console.error(error);
         } finally {
             setBusy(false);

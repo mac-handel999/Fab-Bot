@@ -4,7 +4,7 @@ const cors = require('cors');
 const { Readable } = require('stream');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5500;
 
 app.use(cors());
 app.use(express.json());
@@ -94,4 +94,12 @@ app.post('/api/chat', async (req, res) => {
     }
 });
 
-app.listen(PORT, () => console.log(`Backend running on http://localhost:${PORT}`));
+// Vercel invokes the exported app directly as a serverless function and
+// manages the request/response lifecycle itself — app.listen() must NOT run
+// there. Only start a real listener when this file is executed directly
+// with `node chat.js` (e.g. local testing outside of `vercel dev`).
+if (require.main === module) {
+    app.listen(PORT, () => console.log(`Backend running on http://localhost:${PORT}`));
+}
+
+module.exports = app;
