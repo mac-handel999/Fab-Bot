@@ -220,3 +220,25 @@ footer {
     border-top: 1px solid rgba(0, 242, 255, 0.25);
     margin: 1em 0;
 }
+
+/* --- Install-as-app button --- */
+.install-btn {
+    padding: 6px 14px;
+    font-size: 0.55rem;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: #00f2ff;
+    background-color: rgba(5, 13, 23, 0.85);
+    border: 1px solid #00f2ff;
+    border-radius: 20px;
+    cursor: pointer;
+    box-shadow: 0 0 10px rgba(0, 242, 255, 0.25);
+    transition: background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.install-btn:hover {
+    background-color: #00f2ff;
+    color: #050d17;
+    box-shadow: 0 0 16px rgba(0, 242, 255, 0.6), 0 0 30px rgba(0, 242, 255, 0.25);
+}

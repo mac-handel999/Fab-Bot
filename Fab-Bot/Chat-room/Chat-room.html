@@ -11,11 +11,15 @@
   </title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.6/purify.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/13.0.2/marked.min.js"></script>
- 
-  
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+  <meta name="description" content="Fab Bot.ai is a powerful AI chatbot that can answer questions, provide information, and assist with various tasks. It is built using Groq AI's Llama 3 model and is designed to be user-friendly and accessible to everyone.">
+  <meta name="keywords" content="Fab Bot.ai, AI chatbot, Groq AI, Llama 3, chatbot, artificial intelligence, machine learning, natural language processing, conversational AI, virtual assistant">
+  <link rel="icon" type="png" href="images/fab bot-logo.png ">
     <!-- Custom Styles -->
   <link rel="stylesheet" href="chat-room.css">
   <!-- <link rel="stylesheet" href="/Fab-Bot/style.css"> -->
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#00f2ff">
 </head>
 
 <body>
@@ -23,8 +27,10 @@
    <div class="head">
      <span>
        <figure>
+        <a href="/Fab-Bot/index.html">
          <img  src="images/fab bot-logo.png" alt=" Fab Bot.ai-logo image" width=" 150px " height=" 150px " class="logo-img"  >
-       </figure>
+        </a>
+        </figure>
      </span>
      
     <p>{FABIAN CODES HQ} <br />
@@ -38,29 +44,43 @@
         CLEAR CHATS
        </button>
      </a>
-   </span>
-   </div><br />
+   </span> <br>
+
    
-  <br />
+   </div>
+   
+
   
   <br />
   <div class="container">
     
   </div><br />
 
+<br>
 
-
-  
+<br>
+<div class="mode-switcher">
+  <button class="mode-btn" data-mode="cybersec">🛡️ Cyber Sec</button>
+  <button class="mode-btn" data-mode="generaltech">💻 General Tech</button>
+  <button class="mode-btn" data-mode="general">💬 General Stuff</button>
+</div>
+  <br>
   <div class="input-section">
 
+    
+
     <span class="input">
-      <input type="text" name="input" id="input"  placeholder=" Type Prompt Here" />
+      <textarea name="input" id="input"  placeholder=" Type Prompt Here" ></textarea>
     </span>
     
    <span class="input-btn">
-     <button class="search-btn">
-      PROMPT
-     </button>
+    <button class="search-btn">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor"
+        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="22" y1="2" x2="11" y2="13"></line>
+        <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+      </svg>
+    </button>
    </span>  <br />
    
    <br>
@@ -73,6 +93,9 @@
     <!-- Project -->
   <script src="Chat-room.js">
   </script>
+
+
+
 </body>
 
 </html>

@@ -3,6 +3,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const promptButton = document.querySelector('.search-btn');
     const chatContainer = document.querySelector('.container');
     const clearChatsBtn = document.getElementById('clear-btn');
+    const modeButtons = document.querySelectorAll('.mode-btn'); // buttons with data-mode="cybersec" | "generaltech" | "general"
+    const installBtn = document.getElementById('install-app-btn');
 
     // --- Configuration ---
     // If you're running the frontend with Live Server (port 5500), it can't
@@ -14,6 +16,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const isLiveServer = window.location.port === '5500';
     const API_ENDPOINT = isLiveServer ? 'http://localhost:3000/api/chat' : '/api/chat';
     const STORAGE_KEY = 'fabBotChatHistory';
+    const MODE_STORAGE_KEY = 'fabBotMode';
+    const VALID_MODES = ['cybersec', 'generaltech', 'general'];
+    const DEFAULT_MODE = 'general';
 
     if (!inputElement || !promptButton || !chatContainer) {
         console.error('chat-room.js: required DOM elements not found. Check your markup selectors.');
@@ -26,8 +31,40 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     let isStreaming = false;
+    let currentMode = loadMode();
 
+    applyActiveModeStyling();
     loadChatHistory();
+    setupInstallPrompt();
+
+    /**
+     * Reads the saved mode from localStorage, falling back to the default
+     * if nothing is saved or the saved value isn't one of the known modes.
+     */
+    function loadMode() {
+        const saved = localStorage.getItem(MODE_STORAGE_KEY);
+        return VALID_MODES.includes(saved) ? saved : DEFAULT_MODE;
+    }
+
+    /**
+     * Highlights whichever mode button matches currentMode.
+     */
+    function applyActiveModeStyling() {
+        modeButtons.forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.mode === currentMode);
+        });
+    }
+
+    modeButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const newMode = btn.dataset.mode;
+            if (!VALID_MODES.includes(newMode) || newMode === currentMode) return;
+            currentMode = newMode;
+            localStorage.setItem(MODE_STORAGE_KEY, currentMode);
+            applyActiveModeStyling();
+        });
+    });
+
 
     /**
      * Converts raw markdown text into sanitized HTML.
@@ -121,7 +158,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    messages: [{ role: 'user', content: userPrompt }]
+                    messages: [{ role: 'user', content: userPrompt }],
+                    mode: currentMode
                 })
             });
 
@@ -218,4 +256,45 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.removeItem(STORAGE_KEY);
         chatContainer.innerHTML = '';
     });
+
+    /**
+     * Registers the service worker (required for installability in most
+     * browsers) and wires up the "Install App" button using the native
+     * beforeinstallprompt flow. Chromium browsers only (Chrome, Edge,
+     * Brave) — Firefox and Safari don't support this API, so the button
+     * simply never appears there, which is expected.
+     */
+    function setupInstallPrompt() {
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/service-worker.js')
+                    .catch(err => console.error('Service worker registration failed:', err));
+            });
+        }
+
+        if (!installBtn) return; // button not present in this page's markup
+
+        let deferredInstallPrompt = null;
+        installBtn.hidden = true; // hidden until the browser confirms install is available
+
+        window.addEventListener('beforeinstallprompt', (event) => {
+            event.preventDefault();
+            deferredInstallPrompt = event;
+            installBtn.hidden = false;
+        });
+
+        installBtn.addEventListener('click', async () => {
+            if (!deferredInstallPrompt) return;
+            deferredInstallPrompt.prompt();
+            const { outcome } = await deferredInstallPrompt.userChoice;
+            console.log(`Install prompt outcome: ${outcome}`);
+            deferredInstallPrompt = null;
+            installBtn.hidden = true;
+        });
+
+        window.addEventListener('appinstalled', () => {
+            installBtn.hidden = true;
+            deferredInstallPrompt = null;
+        });
+    }
 });
